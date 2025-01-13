@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Extension AdVech</title>
+    <!-- <script src="https://kit.fontawesome.com/62424c24bf.js" crossorigin="anonymous"></script> -->
+</head>
+<body>
+    <header>
+        <!-- Logo and Title -->
+        <img src="./images/logo.png" alt="logo" class="logo">
+        <h1>-AdVech Tool</h1>
+        <!-- Button to open the app -->
+        <button id="open-app">Open App</button>
+    </header>
+<section class="first-page" >
+    <div class="content">
+        <img src="./images/aucun.png" alt="aucun">
+        <h2>No prospects to import from this page.</h2>
+        <p>You need to go to a LinkedIn page where there are prospects to import, such as a search, a profile, or your connections.</p>
+        <div class="linkdin">
+            <button id="linkedin-link">Search LinkedIn</button>
+        </div>
+    </div>
+</section>
+<section class="second-page" >
+    <div class="content">
+        <h2>Import from a search</h2>
+        <!-- <div class="typesearh">
+            <p>Recherche exact</p>
+            <input type="text" class="search-type-prospect" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div> -->
+        <div class="forum-nombre-prospect">
+            <p color="#6E7191" font-style="normal">Nombre à importer</p>
+            <input class="forum-nombre-prospect input " id="prospects_number" type="number" min="1" max="100">
+            <button id="valider-check">Valider</button>
+        </div>
+        <div id="results"></div>
+    </div>
+</section>
+    
+    <!-- External script -->
+    <script src="scripts.js"></script>
+</body>
+</html>
