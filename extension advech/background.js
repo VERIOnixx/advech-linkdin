@@ -44,16 +44,14 @@ async function getAccessToken() {
   authUrl.searchParams.append('client_id', clientId);
   authUrl.searchParams.append('redirect_uri', redirectUrl);
   authUrl.searchParams.append('state', state);
-  authUrl.searchParams.append('scope', 'openid profile email ');
-
-  console.log('Starting auth flow with URL:', authUrl.toString());
+  authUrl.searchParams.append('scope', 'r_basicprofile ');
 
   try {
     const responseUrl = await chrome.identity.launchWebAuthFlow({
       url: authUrl.toString(),
       interactive: true
     });
-    console.log('Received response URL:', responseUrl);
+    
 
     if (!responseUrl) {
       throw new Error('No response URL received');

@@ -19,12 +19,9 @@
   "oauth2": {
     "client_id": "78vlfoy3qalti3",
     "scopes": [
-      "openid",
-      "profile",
-      "email",
+      "r_basicprofile",
+      "r_organization_social",
       "r_liteprofile",
-      "r_emailaddress",
-      "w_member_social",
       "r_fullprofile"
     ]
   },

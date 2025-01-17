@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   
     async function getLinkedInAccessToken() {
-        console.log('Attempting to get LinkedIn access token...');
         try {
           const response = await chrome.runtime.sendMessage({ type: "getToken" });
           console.log('Token response received:', response ? 'Success' : 'Failed');
@@ -56,56 +55,56 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     
-      async function searchProfiles(accessToken, count) {
-  try {
-    const response = await fetch(`https://api.linkedin.com/v2/userinfo`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
+      async function searchProfiles(accessToken) {
+        try {
+         const response = await fetch(`https://api.linkedin.com/v2/me`, {
+            method: "GET",
+            headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+             });
 
-    if (!response.ok) {
-      const errorDetails = await response.text();
-      throw new Error(`API error: ${response.status} ${errorDetails}`);
-    }
+          if (!response.ok) {
+          const errorDetails = await response.text();
+           throw new Error(`API error: ${response.status} ${errorDetails}`);
+           }
 
-    const data = await response.json();
-    console.log("Search results:", data);
-    return data.elements || [];
-  } catch (error) {
-    console.error("Search failed:", error.message);
-    return [];
-  }
-}
+            const data = await response.json();
+            console.log("Search results:", data);
+            return data.elements;
+          } catch (error) {
+           console.error("Search failed:", error.message);
+            return [];
+          }
+        }
 
 
       async function getProfileDetails(accessToken, profileId) {
-        console.log(`Fetching details for profile ${profileId}...`);
-        try {
-          const response = await chrome.runtime.sendMessage({
-            type: "makeLinkedInRequest",
-            url: `https://api.linkedin.com/v2/people/${profileId}`,
-            token: accessToken
-          });
-          
-          console.log('Profile details response:', response);
-          
-          if (response.error) {
-            console.error('Profile details error:', response.error);
-            throw new Error(response.error);
-          }
-          
-          return response;
-        } catch (error) {
-          console.error('Profile details error:', error);
-          throw new Error(`Failed to get profile details: ${error.message}`);
+        const url = `https://api.linkedin.com/v2/people/(id=${profileId})`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching profile details: ${response.statusText}`);
         }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
       }
     
       async function fetchLinkedInProfiles(numberOfProfiles) {
-        console.log(`Starting fetch for ${numberOfProfiles} profiles...`);
         try {
           const accessToken = await getLinkedInAccessToken();
           console.log('Access token obtained successfully');
@@ -114,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const count = Math.min(numberOfProfiles, 10);
         
           console.log(`Searching for ${count} profiles...`);
-          const elements = await searchProfiles(accessToken, count);
+          const elements = await searchProfiles(accessToken);
           console.log(`Found ${elements.length} profiles in search`);
         
           for (const element of elements) {
@@ -171,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
           console.error('Extraction failed:', error);
           alert(`Failed to fetch profiles: ${error.message}`);
-        } finally {git init
+        } finally {
           // Reset button
           extractDataBtn.disabled = false;
           extractDataBtn.textContent = 'Extract Data';
